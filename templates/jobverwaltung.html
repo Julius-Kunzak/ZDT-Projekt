@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jobverwaltung</title>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            font-family: 'Arial', sans-serif;
+            background-color: #f0f0f0;
+        }
+
+        .container {
+            text-align: center;
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            margin: 20px;
+            position: relative;
+        }
+
+        h1 {
+            font-size: 36px;
+            font-family: 'Helvetica Neue', sans-serif;
+            font-weight: bold;
+        }
+
+        .button {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 10px 20px;
+            font-size: 16px;
+            color: white;
+            background-color: blue;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.4);
+        }
+
+        .modal-content {
+            background-color: white;
+            margin: 15% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+            border-radius: 10px;
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 8px;
+            box-sizing: border-box;
+        }
+
+        .save-button {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 10px 20px;
+            font-size: 16px;
+            color: white;
+            background-color: green;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        .notification {
+            display: none;
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background-color: green;
+            color: white;
+            text-align: center;
+            padding: 10px;
+            font-size: 18px;
+        }
+
+        .job-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
+
+        .job-container .icons {
+            display: flex;
+            gap: 10px;
+        }
+
+        .job-container .icons i {
+            cursor: pointer;
+        }
+
+        .button, .dashboard-button {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 10px 20px;
+            font-size: 16px;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        .button {
+            background-color: #007BFF;
+        }
+
+        .dashboard-button {
+            background-color: #007BFF;
+            position: absolute;
+            top: 20px;
+            left: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="{{ url_for('dashboard') }}" class="dashboard-button">Dashboard</a>
+        <h1>Willkommen in der Jobverwaltung</h1>
+        <button class="button" id="newJobBtn">Neuer Job erstellen</button>
+        <div id="jobsList">
+            {% for job in jobs %}
+            <div class="job-container" data-id="{{ job.id }}">
+                <span>{{ job.jobname }}</span>
+                <div class="icons">
+                    <i class="info-icon" onclick="showJobDetails({{ job.id }})">ℹ️</i>
+                    <i class="delete-icon" onclick="deleteJob({{ job.id }})">🗑️</i>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <div id="myModal" class="modal">
+        <div class="modal-content">
+            <span class="close">×</span>
+            <form id="jobForm">
+                <div class="form-group">
+                    <label for="jobname">Jobname:</label>
+                    <input type="text" id="jobname" name="jobname" required>
+                </div>
+                <div class="form-group">
+                    <label for="experience">Berufserfahrung:</label>
+                    <input type="text" id="experience" name="experience" required>
+                </div>
+                <div class="form-group">
+                    <label for="qualifications">Qualifikationen:</label>
+                    <input type="text" id="qualifications" name="qualifications" required>
+                </div>
+                <div class="form-group">
+                    <label for="education">Ausbildung:</label>
+                    <input type="text" id="education" name="education" required>
+                </div>
+                <div class="form-group">
+                    <label for="location">Standort:</label>
+                    <input type="text" id="location" name="location" required>
+                </div>
+                <div class="form-group">
+                    <label for="weight_experience">Gewichtung Berufserfahrung:</label>
+                    <input type="number" step="0.01" id="weight_experience" name="weight_experience" required>
+                </div>
+                <div class="form-group">
+                    <label for="weight_qualifications">Gewichtung Qualifikationen:</label>
+                    <input type="number" step="0.01" id="weight_qualifications" name="weight_qualifications" required>
+                </div>
+                <div class="form-group">
+                    <label for="weight_education">Gewichtung Ausbildung:</label>
+                    <input type="number" step="0.01" id="weight_education" name="weight_education" required>
+                </div>
+                <button type="submit" class="save-button">Speichern</button>
+            </form>
+        </div>
+    </div>
+
+    <div id="notification" class="notification">
+        Job erfolgreich angelegt!
+    </div>
+
+    <script>
+        var modal = document.getElementById("myModal");
+        var btn = document.getElementById("newJobBtn");
+        var span = document.getElementsByClassName("close")[0];
+        var form = document.getElementById("jobForm");
+        var notification = document.getElementById("notification");
+        var jobsList = document.getElementById("jobsList");
+
+        btn.onclick = function() {
+            modal.style.display = "block";
+        }
+
+        span.onclick = function() {
+            modal.style.display = "none";
+        }
+
+        window.onclick = function(event) {
+            if (event.target == modal) {
+                modal.style.display = "none";
+            }
+        }
+
+        form.onsubmit = function(event) {
+            event.preventDefault();
+            var formData = new FormData(form);
+            fetch('/create_job', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    modal.style.display = "none";
+                    notification.style.display = "block";
+                    setTimeout(() => {
+                        notification.style.display = "none";
+                    }, 3000);
+                    addJobToList(data.job);
+                }
+            });
+        }
+
+        function addJobToList(job) {
+            var jobContainer = document.createElement('div');
+            jobContainer.className = 'job-container';
+            jobContainer.setAttribute('data-id', job.id);
+            jobContainer.innerHTML = `
+                <span>${job.jobname}</span>
+                <div class="icons">
+                    <i class="info-icon" onclick="showJobDetails(${job.id})">ℹ️</i>
+                    <i class="delete-icon" onclick="deleteJob(${job.id})">🗑️</i>
+                </div>
+            `;
+            jobsList.appendChild(jobContainer);
+        }
+
+        function showJobDetails(jobId) {
+            fetch(`/job_details/${jobId}`)
+            .then(response => response.json())
+            .then(data => {
+                var detailsModal = document.createElement('div');
+                detailsModal.className = 'modal';
+                detailsModal.style.display = 'block';
+                detailsModal.innerHTML = `
+                    <div class="modal-content">
+                        <span class="close" onclick="closeDetailsModal(this)">×</span>
+                        <h2>${data.jobname}</h2>
+                        <form id="editJobForm">
+                            <div class="form-group">
+                                <label for="edit_jobname">Jobname:</label>
+                                <input type="text" id="edit_jobname" name="jobname" value="${data.jobname}" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="edit_experience">Berufserfahrung:</label>
+                                <input type="text" id="edit_experience" name="experience" value="${data.experience}" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="edit_qualifications">Qualifikationen:</label>
+                                <input type="text" id="edit_qualifications" name="qualifications" value="${data.qualifications}" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="edit_education">Ausbildung:</label>
+                                <input type="text" id="edit_education" name="education" value="${data.education}" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="edit_location">Standort:</label>
+                                <input type="text" id="edit_location" name="location" value="${data.location}" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="edit_weight_experience">Gewichtung Berufserfahrung:</label>
+                                <input type="number" step="0.01" id="edit_weight_experience" name="weight_experience" value="${data.weight_experience}" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="edit_weight_qualifications">Gewichtung Qualifikationen:</label>
+                                <input type="number" step="0.01" id="edit_weight_qualifications" name="weight_qualifications" value="${data.weight_qualifications}" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="edit_weight_education">Gewichtung Ausbildung:</label>
+                                <input type="number" step="0.01" id="edit_weight_education" name="weight_education" value="${data.weight_education}" required>
+                            </div>
+                            <button type="submit" class="save-button">Speichern</button>
+                        </form>
+                    </div>
+                `;
+                document.body.appendChild(detailsModal);
+
+                var editForm = document.getElementById("editJobForm");
+                editForm.onsubmit = function(event) {
+                    event.preventDefault();
+                    var editFormData = new FormData(editForm);
+                    fetch(`/update_job/${jobId}`, {
+                        method: 'POST',
+                        body: editFormData
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.status === 'success') {
+                            detailsModal.style.display = "none";
+                            document.body.removeChild(detailsModal);
+                            location.reload(); // Seite neu laden, um die Änderungen anzuzeigen
+                        }
+                    });
+                }
+            });
+        }
+
+        function closeDetailsModal(closeButton) {
+            var modal = closeButton.parentElement.parentElement;
+            modal.style.display = 'none';
+            document.body.removeChild(modal);
+        }
+
+        function deleteJob(jobId) {
+            fetch(`/delete_job/${jobId}`, {
+                method: 'DELETE'
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    var jobContainer = document.querySelector(`.job-container[data-id="${jobId}"]`);
+                    jobsList.removeChild(jobContainer);
+                }
+            });
+        }
+    </script>
+</body>
+</html>

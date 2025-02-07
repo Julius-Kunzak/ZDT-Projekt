@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Offene Stellen</title>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            font-family: 'Arial', sans-serif;
+            background-color: #f0f0f0;
+        }
+
+        .container {
+            text-align: center;
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            margin: 20px;
+            position: relative;
+            max-width: 800px;
+            margin: 20px auto;
+        }
+
+        h1 {
+            font-size: 36px;
+            font-family: 'Helvetica Neue', sans-serif;
+            font-weight: bold;
+        }
+
+        .jobs-list {
+            max-height: 400px;
+            overflow-y: auto;
+            margin-top: 20px;
+        }
+
+        .job-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
+
+        .job-container .icons {
+            display: flex;
+            gap: 10px;
+        }
+
+        .job-container .icons i {
+            cursor: pointer;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.4);
+        }
+
+        .modal-content {
+            background-color: white;
+            margin: 15% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+            border-radius: 10px;
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Offene Stellen</h1>
+        <p>Wir freuen uns auf Ihre Bewerbung! Laden Sie einfach diese Vorlage herunter, füllen Sie sie aus und senden Sie sie uns per E-Mail an <a href="mailto:nullnull90gmb@gmail.com?subject=Bewerbung">nullnull90gmb@gmail.com</a> oder bewerben Sie sich direkt über unsere Plattform mit "Jetzt bewerben". Alternativ können Sie auch das Formular vor Ort ausfüllen. Wir freuen uns darauf, von Ihnen zu hören!</p>
+        <a href="/download_template" download="Vorlage_Bewerbung.dotx">Vorlage herunterladen</a>
+        <div class="jobs-list" id="jobsList">
+            {% for job in jobs %}
+            <div class="job-container" data-id="{{ job.id }}">
+                <span>{{ job.jobname }}</span>
+                <div class="icons">
+                    <i class="info-icon" onclick="showJobDetails({{ job.id }})">ℹ️</i>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- Modal für Jobdetails -->
+    <div id="jobDetailsModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">×</span>
+            <h2>Jobdetails</h2>
+            <p id="jobDetails"></p>
+        </div>
+    </div>
+
+    <script>
+        function showJobDetails(jobId) {
+            fetch(`/job_details_popup/${jobId}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.status === 'error') {
+                        alert(data.message);
+                    } else {
+                        const jobDetails = `
+                            <strong>Jobname:</strong> ${data.jobname}<br>
+                            <strong>Erfahrung:</strong> ${data.experience}<br>
+                            <strong>Qualifikationen:</strong> ${data.qualifications}<br>
+                            <strong>Bildung:</strong> ${data.education}<br>
+                            <strong>Standort:</strong> ${data.location}
+                        `;
+                        document.getElementById('jobDetails').innerHTML = jobDetails;
+                        document.getElementById('jobDetailsModal').style.display = 'block';
+                    }
+                });
+        }
+
+        function closeModal() {
+            document.getElementById('jobDetailsModal').style.display = 'none';
+        }
+    </script>
+</body>
+</html>

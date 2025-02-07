@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - 0090 GmbH</title>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            font-family: 'Arial', sans-serif;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background-color: #f0f0f0;
+        }
+
+        .header {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        .header h1 {
+            margin: 0;
+            font-size: 36px; /* Hier kannst du die Schriftgröße anpassen */
+            font-family: 'Helvetica Neue', sans-serif;
+            font-weight: bold;
+        }
+
+        .dropdown-container {
+            margin-top: 20px;
+        }
+
+        .dropdown {
+            padding: 10px;
+            font-size: 16px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+
+        .button-container {
+            display: flex;
+            justify-content: flex-end;
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            flex-direction: column;
+        }
+
+        .button-container button {
+            padding: 15px 30px;
+            background-color: #007BFF;
+            border: none;
+            border-radius: 5px;
+            color: white;
+            font-size: 18px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            margin-top: 10px;
+        }
+
+        .button-container button:hover {
+            background-color: #0056b3;
+        }
+
+        .content {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            height: 100%;
+        }
+
+        .score-container {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background-color: white;
+            color: black;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 300px;
+            box-sizing: border-box;
+            margin: 10px;
+            position: relative;
+        }
+
+        .score {
+            font-size: 48px;
+            font-weight: bold;
+        }
+
+        .thermometer {
+            width: 100%;
+            height: 20px;
+            background-color: #ccc;
+            border-radius: 10px;
+            margin-top: 10px;
+            position: relative;
+        }
+
+        .thermometer-fill {
+            height: 100%;
+            background-color: #007BFF;
+            border-radius: 10px;
+            transition: width 0.3s;
+        }
+
+        .delete-button, .info-button {
+            position: absolute;
+            top: 10px;
+            background: none;
+            border: none;
+            cursor: pointer;
+        }
+
+        .delete-button {
+            right: 10px;
+        }
+
+        .info-button {
+            right: 40px;
+        }
+
+        .delete-button img, .info-button img {
+            width: 20px;
+            height: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Willkommen im Dashboard</h1>
+        <div class="dropdown-container">
+            <form method="POST" action="/dashboard">
+                <select class="dropdown" name="position" onchange="this.form.submit()">
+                    {% for position in positions %}
+                    <option value="{{ position }}" {% if position == selected_position %}selected{% endif %}>{{ position }}</option>
+                    {% endfor %}
+                </select>
+            </form>
+        </div>
+    </div>
+    <div class="button-container">
+        <button onclick="fetchMails()">Mails abrufen</button>
+        <button onclick="updateScores()">Aktualisieren</button>
+        <button onclick="manageJobs()">Jobverwaltung</button>
+    </div>
+    <div class="content" id="content">
+        {% for score in scores %}
+        <div class="score-container">
+            <div class="name">{{ score.name }}</div>
+            <div class="score">{{ score.score }}</div>
+            <div class="thermometer">
+                <div class="thermometer-fill" style="width: {{ score.score }}%;"></div>
+            </div>
+            <form method="POST" action="/delete/{{ score.id }}" class="delete-form" onsubmit="return confirmDelete()">
+                <button type="submit" class="delete-button">
+                    <img src="https://img.icons8.com/ios-glyphs/30/000000/trash.png" alt="Löschen">
+                </button>
+            </form>
+            <button class="info-button" onclick="showEmail('{{ score.id }}')">
+                <img src="https://img.icons8.com/ios-glyphs/30/000000/info.png" alt="Info">
+            </button>
+        </div>
+        {% endfor %}
+    </div>
+    <script>
+        function fetchMails() {
+            fetch('/api/fetch_mails')
+                .then(response => response.json())
+                .then(data => {
+                    alert('Mails wurden abgerufen: ' + JSON.stringify(data));
+                })
+                .catch(error => {
+                    console.error('Fehler beim Abrufen der Mails:', error);
+                });
+        }
+
+        function updateScores() {
+            const selectedPosition = document.querySelector('.dropdown').value;
+            fetch('/update_scores', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ selected_position: selectedPosition })
+            })
+                .then(response => response.json())
+                .then(data => {
+                    alert(data.message); // Erfolgsmeldung anzeigen
+                    const content = document.getElementById('content');
+                    content.innerHTML = '';
+                    data.scores.forEach(score => {
+                        const scoreContainer = document.createElement('div');
+                        scoreContainer.className = 'score-container';
+                        scoreContainer.innerHTML = `
+                            <div class="name">${score.name}</div>
+                            <div class="score">${score.score}</div>
+                            <div class="thermometer">
+                                <div class="thermometer-fill" style="width: ${score.score}%;"></div>
+                            </div>
+                            <form method="POST" action="/delete/${score.id}" class="delete-form" onsubmit="return confirmDelete()">
+                                <button type="submit" class="delete-button">
+                                    <img src="https://img.icons8.com/ios-glyphs/30/000000/trash.png" alt="Löschen">
+                                </button>
+                            </form>
+                            <button class="info-button" onclick="showEmail('${score.id}')">
+                                <img src="https://img.icons8.com/ios-glyphs/30/000000/info.png" alt="Info">
+                            </button>
+                        `;
+                        content.appendChild(scoreContainer);
+                    });
+                })
+                .catch(error => {
+                    console.error('Fehler beim Aktualisieren der Scores:', error);
+                });
+        }
+
+        function confirmDelete() {
+            return confirm('Bist du sicher, dass du diesen Eintrag löschen möchtest?');
+        }
+
+        function showEmail(id) {
+    fetch(`/get_email/${id}`)
+        .then(response => response.json())
+        .then(data => {
+            if (data.error) {
+                alert(`Fehler: ${data.error}`);
+            } else {
+                alert(`Job: ${data.job}\nVorname: ${data.vorname}\nNachname: ${data.nachname}\nE-Mail: ${data.email}\nGeburtstag: ${data.geburtstag}\nBerufserfahrung: ${data.berufserfahrung}\nQualifikation: ${data.qualifikation}\nAusbildung: ${data.ausbildung}\nScore: ${data.score}\n\nJobname: ${data.jobname}\nErfahrung: ${data.experience}\nQualifikationen: ${data.qualifications}\nAusbildung: ${data.education}\nStandort: ${data.location}\nGewichtung Erfahrung: ${data.weight_experience}\nGewichtung Qualifikationen: ${data.weight_qualifications}\nGewichtung Ausbildung: ${data.weight_education}`);
+            }
+        })
+        .catch(error => {
+            console.error('Fehler beim Abrufen der Daten:', error);
+        });
+}
+
+        function manageJobs() {
+            window.location.href = "/manage_jobs";
+        }
+
+
+    </script>
+</body>
+</html>

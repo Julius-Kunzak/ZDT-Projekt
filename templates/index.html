@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Null Null 90 GmbH</title>
+    <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
+    <style>
+        /* Stile für das Hintergrundvideo und die gesamte Seite */
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            font-family: 'Arial', sans-serif;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+
+        /* Hintergrundvideo */
+        .background-video {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: -1;
+        }
+
+        /* Login-Button */
+        .login-btn {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            padding: 10px 20px;
+            background-color: rgba(255, 255, 255, 0.6);
+            border: none;
+            border-radius: 5px;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.6s;
+        }
+
+        .login-btn:hover {
+            background-color: rgba(255, 255, 255, 0.4);
+        }
+
+        /* Titel */
+        h1 {
+            font-size: 48px;
+            margin-bottom: 20px;
+        }
+
+        /* Offene Stellen-Button */
+        .jobs-btn {
+            padding: 15px 30px;
+            background-color: rgba(255, 255, 255, 0.6);
+            border: none;
+            border-radius: 5px;
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+            transition: background-color 0.6s;
+        }
+
+        .jobs-btn:hover {
+            background-color: rgba(255, 255, 255, 0.4);
+        }
+
+        /* Bewerbungs-Button */
+        .apply-btn {
+            padding: 15px 30px;
+            background-color: rgba(255, 255, 255, 0.6);
+            border: none;
+            border-radius: 5px;
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+            transition: background-color 0.6s;
+            margin-top: 20px; /* Abstand zwischen den Buttons */
+        }
+
+        .apply-btn:hover {
+            background-color: rgba(255, 255, 255, 0.4);
+        }
+
+        header {
+            position: absolute;
+            top: 0;
+            right: 10px;
+            padding: 10px;
+        }
+
+        .logo {
+            height: 100px; /* Größe des Logos */
+            width: auto;
+
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <img src="{{ url_for('static', filename='Logo.jpg') }}"  class="logo">
+    </header>
+
+    <!-- Hintergrundvideo -->
+    <video class="background-video" autoplay loop muted>
+        <source src="{{ url_for('static', filename='background.mp4') }}" type="video/mp4">
+        Ihr Browser unterstützt kein HTML5 Video.
+    </video>
+
+    <!-- Login Button -->
+    <button class="login-btn" onclick="window.location.href='{{ url_for('login') }}';">Login </button>
+
+    <!-- Titel -->
+    <h1>Null Null 90 GmbH</h1>
+
+    <!-- Offene Stellen Button -->
+    <button class="jobs-btn" onclick="window.location.href='{{ url_for('stellenanzeigen') }}';">Offene Stellen</button>
+
+    <!-- Bewerbungs-Button -->
+    <button class="apply-btn" onclick="window.location.href='{{ url_for('bewerbung') }}';">Jetzt bewerben</button>
+</body>
+</html>
