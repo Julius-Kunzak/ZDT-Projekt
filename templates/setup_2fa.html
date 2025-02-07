@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <title>2FA aktivieren</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            margin: 20px;
+            padding: 20px;
+            text-align: center;
+        }
+        .container {
+            max-width: 500px;
+            margin: auto;
+        }
+        .qr-code {
+            margin: 20px auto;
+            width: 200px;
+            height: 200px;
+        }
+        input[type="text"] {
+            padding: 8px;
+            font-size: 16px;
+            width: 80%;
+            margin-bottom: 10px;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>2FA aktivieren</h1>
+        <p>Scannen Sie den folgenden QR-Code mit Google Authenticator:</p>
+        <img class="qr-code" src="data:image/png;base64,{{ qr_code }}" alt="2FA QR-Code">
+        <p>Alternativ: Geben Sie diesen Code in Google Authenticator ein:</p>
+        <p><strong>{{ secret }}</strong></p>
+        <p>Geben Sie den von Google Authenticator generierten 2FA-Code ein, um die Einrichtung abzuschließen:</p>
+        <form method="POST" action="{{ url_for('setup_2fa') }}">
+            <input type="text" name="token" placeholder="2FA Code" required>
+            <button type="submit">2FA bestätigen</button>
+        </form>
+    </div>
+</body>
+</html>

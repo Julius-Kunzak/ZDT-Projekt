@@ -3,56 +3,228 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login - 0090 GmbH</title>
+    <title>Login</title>
     <style>
-        body, html {
-            margin: 0;
-            padding: 0;
-            width: 100%;
-            height: 100%;
-            font-family: 'Arial', sans-serif;
+        /* Hintergrundbild */
+        body {
+            background-size: cover;
             display: flex;
             justify-content: center;
             align-items: center;
-            background-color: #f0f0f0;
+            height: 100vh;
+            margin: 0;
+            font-family: 'Arial', sans-serif;
         }
-
+    
+        /* Zentrales Login-Formular */
         .login-container {
+            background-color: rgba(255, 255, 255, 0.9);
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.1);
+            width: auto; /* Breite passt sich dem Inhalt an */
+            max-width: 400px; /* Maximalbreite auf 400px begrenzen */
+            min-height: 350px;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            background-color: white;
-            color: black;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            width: 300px;
         }
-
-        .login-container input {
-            margin: 10px 0;
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            width: 100%;
+    
+        label, input, button {
+            display: block;
+            margin-bottom: 12px;
+            font-size: 15px;
+            width: 100%; /* Volle Breite für die Eingabefelder */
+        }
+    
+        input, button {
+            padding: 12px; /* Gleiche Polsterung für beide Buttons */
+            border-radius: 5px; /* Gleiche abgerundeten Ecken */
+            font-size: 18px; /* Gleiche Schriftgröße */
             box-sizing: border-box;
         }
+    
+        button {
+            background-color: #4CAF50; /* Login Button */
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+    
+        button:hover {
+            background-color: #45a049;
+        }
+    
+        .register-button {
+            background-color: transparent; /* Keine Hintergrundfarbe */
+            color: #008CBA; /* Textfarbe */
+             font-size: 16px; /* Gleiche Schriftgröße wie der Login-Button */
+            text-decoration: underline; /* Unterstreichen für Link-Effekt */
+            border: none;
+            cursor: pointer;
+            padding: 0; /* Kein Padding, um wie Text auszusehen */
+            margin-top: 10px;
+        }
 
-        .login-container button {
-            padding: 10px 20px;
-            background-color: #007BFF;
+        .register-button:hover {
+             color: #007BB5; /* Dunklere Farbe beim Hover */
+            text-decoration: underline;
+            background-color: transparent; /* Sicherstellen, dass der Hintergrund transparent bleibt */
+            border: none; /* Keine Ränder im Hover-Zustand */
+        }
+        input {
+            border: 1px solid #ccc;
+        }
+    
+        input:focus {
+            border-color: #b9c2b9;
+            outline: none;
+        }
+    
+        /* Mobile Anpassungen */
+        @media (max-width: 768px) {
+            .login-container {
+                width: 80%; /* Login-Box nimmt 80% der Bildschirmbreite */
+                min-height: auto; /* Flexibel auf kleinere Bildschirme */
+                padding: 20px; /* Weniger Padding auf kleinen Bildschirmen */
+            }
+    
+            input, button {
+                padding: 12px; /* Etwas mehr Platz in den Feldern */
+                font-size: 14px; /* Kleinere Schrift für mobile Geräte */
+            }
+    
+            label, input, button {
+                font-size: 14px; /* Schriftgröße anpassen */
+                margin-bottom: 10px; /* Weniger Abstand auf kleinen Geräten */
+            }
+        }
+    
+        /* Tablet Anpassungen */
+        @media (min-width: 769px) and (max-width: 1024px) {
+            .login-container {
+                width: 45%; /* Breite passt sich den Inhalten an */
+                max-width: 450px; /* Maximalbreite auf 450px begrenzen */
+                min-height: 400px; /* Höhe leicht größer */
+                padding: 25px; /* Weniger Padding als bei Desktop, mehr als bei Mobil */
+            }
+    
+            input, button {
+                padding: 14px; /* Etwas mehr Platz in den Feldern */
+                font-size: 18px; /* Größere Schriftgröße auf Tablets */
+            }
+    
+            label, input, button {
+                font-size: 18px; /* Schriftgröße anpassen */
+                margin-bottom: 15px; /* Etwas mehr Abstand als bei Mobilgeräten */
+            }
+        }
+        .button-open-modal {
+            background-color: #007bff;
+            color: white;
+            padding: 12px 20px;
             border: none;
             border-radius: 5px;
-            color: white;
-            font-size: 16px;
             cursor: pointer;
-            transition: background-color 0.3s;
+            font-size: 16px;
+            margin-top: 20px;
+            transition: background-color 0.3s ease, transform 0.1s ease;
+        }
+
+        .button-open-modal:hover {
+            background-color: #0056b3;
+        }
+
+        .button-open-modal:active {
+            transform: scale(0.98);
+        }
+
+        /* Modal (Popup) */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
             width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.4);
+        }
+
+        /* Modal-Box */
+        .modal-content {
+            background-color: white;
+            margin: 10% auto;
+            padding: 20px;
+            border-radius: 8px;
+            width: 90%;
+            max-width: 400px;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+            position: relative;
+        }
+
+        /* Schließen-Button */
+        .modal-close {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            font-size: 20px;
+            cursor: pointer;
+        }
+
+        /* Formular für Schichtanfragen */
+        .reset-pw-form {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .reset-pw-form label {
+            font-weight: bold;
+            margin-top: 10px;
+            color: #333;
+        }
+
+        .reset-pw-form input,
+        .reset-pw-form select,
+        .reset-pw-form textarea {
+            width: 100%;
+            padding: 8px;
+            margin-top: 5px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 14px;
             box-sizing: border-box;
         }
 
-        .login-container button:hover {
+        .reset-pw-form button {
+            width: 100%;
+            padding: 12px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            margin-top: 15px;
+        }
+
+        .reset-pw-form button:hover {
+            background-color: #45a049;
+        }
+        /* Button zum Öffnen des Modals */
+        .button-open-modal {
+            background-color: #007bff;
+            color: white;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 20px;
+        }
+
+        .button-open-modal:hover {
             background-color: #0056b3;
         }
     </style>
@@ -60,11 +232,81 @@
 <body>
     <div class="login-container">
         <h2>Login</h2>
-        <form method="POST" action="/login">
-            <input type="text" name="username" placeholder="Benutzername" required>
-            <input type="password" name="password" placeholder="Passwort" required>
-            <button type="submit">Einloggen</button>
+        <form action="/login" method="POST">
+            <label for="email">E-Mail:</label>
+            <input type="email" name="email" id="email" required>
+            
+            <label for="password">Passwort:</label>
+            <input type="password" name="password" id="password" required>
+
+            <label for="token">2FA Code:</label>
+            <input type="text" name="token" id="token">
+            
+            <button type="submit">Login</button>
         </form>
+
+        <!-- Button zur Registrierungsseite -->
+        <form action="/register" method="GET">
+            <button type="submit" class="register-button">Registrieren</button>
+        </form>
+        {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        <div class="flash-messages">
+          {% for category, message in messages %}
+            <p class="alert {{ category }}">{{ message }}</p>
+          {% endfor %}
+        </div>
+      {% endif %}
+    {% endwith %}
+        <button class="button-open-modal" onclick="openModal()">Neues Passwort</button>
     </div>
+    <div id="resetPwModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <h2>Neues Passwort Setzen</h2>
+            <form action="/new_pw" onsubmit="validatePasswords(event)" method="POST" class="reset-pw-form">
+                <label for="email">E-Mail:</label>
+                <input type="email" id="email" name="email" required>
+                <label for="inital_pw">Initial Passwort:</label>
+                <input type="password" id="inital_pw" name="inital_pw">
+                <label for="neues_pw">Neues Passwort:</label>
+                <input type="password" id="neues_pw" name="neues_pw">
+                <label for="neues_pw_confirm">Neues Passwort bestätigen:</label>
+                <input type="password" id="neues_pw_confirm" name="neues_pw_confirm">
+                <button type="submit">Neues Passwort Setzen</button>
+            </form>
+        </div>
+    </div>
+    <script>
+        function openModal() { document.getElementById("resetPwModal").style.display = "block"; }
+        function closeModal() { document.getElementById("resetPwModal").style.display = "none"; }
+        function validatePasswords(event) {
+            var password = document.getElementById("neues_pw").value;
+            var confirmPassword = document.getElementById("neues_pw_confirm").value;
+            var passwordPattern = /^(?=.*[!@#$%^&*]).+$/;
+
+            if (password.length < 8) {
+                alert("Das Passwort muss mindestens 8 Zeichen lang sein.");
+                event.preventDefault();
+                return false;
+            }
+
+            if (!passwordPattern.test(password)) {
+                alert("Das Passwort muss mindestens ein Sonderzeichen (!@#$%^&*) enthalten.");
+                event.preventDefault();
+                return false;
+            }
+
+            if (password != confirmPassword) {
+                alert("Die Passwörter stimmen nicht überein.");
+                event.preventDefault();
+                return false;
+            }
+
+            return true;
+        }
+
+        
+    </script>
 </body>
 </html>
