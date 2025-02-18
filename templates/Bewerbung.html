@@ -138,7 +138,7 @@
 </head>
 <body>
     <header>
-        <img src="{{ url_for('static', filename='Logo.jpg') }}"  class="logo">
+        <img src="{{ url_for('static', filename='Logo.jpg') }}" class="logo" alt="Logo">
     </header>
 
     <div class="container">
@@ -149,7 +149,10 @@
 
             <h3>Extrahierte Daten:</h3>
             <label for="job">Job:</label>
-            <input type="text" id="job" name="job" placeholder="Job" required>
+            <select id="job" name="job" required>
+                <option value="" disabled selected>Wählen Sie einen Job</option>
+                <option value="initiativbewerbung">Initiativbewerbung</option>
+            </select>
 
             <label for="firstname">Vorname:</label>
             <input type="text" id="firstname" name="firstname" placeholder="Vorname" required>
@@ -178,6 +181,28 @@
     </div>
 
     <script>
+        async function fetchJobs() {
+            try {
+                const response = await fetch('/api/jobs');
+                const jobs = await response.json();
+
+                const jobSelect = document.getElementById('job');
+                jobSelect.innerHTML = '<option value="" disabled selected>Wählen Sie einen Job</option>';  // Reset options
+                jobSelect.innerHTML += '<option value="initiativbewerbung">Initiativbewerbung</option>';  // Add "Initiativbewerbung"
+
+                jobs.forEach(job => {
+                    const option = document.createElement('option');
+                    option.value = job.jobname;  // Assuming jobs have a 'jobname' property
+                    option.textContent = job.jobname;  // Assuming jobs have a 'jobname' property
+                    jobSelect.appendChild(option);
+                });
+            } catch (error) {
+                console.error('Error fetching jobs:', error);
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', fetchJobs);
+
         document.getElementById('resume').addEventListener('change', async function(event) {
             const formData = new FormData();
             formData.append('resume', event.target.files[0]);
