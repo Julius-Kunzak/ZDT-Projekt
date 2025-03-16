@@ -4,136 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Bewerbungsunterlagen einreichen</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='Bewerbung.css') }}">
     <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap');
-
-        *{
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Roboto', sans-serif;
-            background-size: cover;
-            color: white;
-            display: flex;
-            justify-content: center; /* Zentriert den Inhalt horizontal */
-            align-items: center; /* Zentriert den Inhalt vertikal */
-            height: 100vh;
-            margin: 10;
-            position: relative; /* Ermöglicht absolute Positionierung des Logos */
-            
-        }
-
-        .container {
-            text-align: absolute;
-            background-color: rgba(0, 0, 0, 0.7);
-            padding: 10px;
-            border-radius: 10px;
-            max-width: 700px;
-            width: 100%;
-        }
-
-        h2 {
-            font-size: 2em;
-            margin-bottom: 20px;
-        }
-
-        form {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-
-        label, input, textarea, button {
-            width: 100%;
-            margin-bottom: 10px;
-            font-size: 1em;
-            font-family: 'Roboto', sans-serif;
-        }
-
-        input[type="file"] {
-            padding: 10px;
-            border: none;
-            border-radius: 5px;
-            background-color: rgba(255, 255, 255, 0.2);
-            color: white;
-            font-size: 1em;
-            cursor: pointer;
-        }
-
-        input[type="file"]::file-selector-button {
-            background-color: #4CAF50;
-            color: white;
-            border: none;
-            padding: 10px;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-
-        input[type="file"]::file-selector-button:hover {
-            background-color: #45a049;
-        }
-
-        input[type="text"], input[type="email"], input[type="date"], textarea {
-            padding: 10px;
-            border: none;
-            border-radius: 5px;
-            background-color: rgba(255, 255, 255, 0.2);
-            color: white;
-            font-size: 1em;
-        }
-
-        input[type="text"]::placeholder, input[type="email"]::placeholder, input[type="date"]::placeholder, textarea::placeholder {
-            color: rgba(255, 255, 255, 0.7);
-        }
-
-        input[type="text"]:focus, input[type="email"]:focus, input[type="date"]:focus, textarea:focus {
-            outline: none;
-            background-color: rgba(255, 255, 255, 0.3);
-        }
-
-        button {
-            padding: 10px;
-            border: none;
-            border-radius: 5px;
-            background-color: #4CAF50;
-            color: white;
-            cursor: pointer;
-            font-size: 1em;
-        }
-
-        button:hover {
-            background-color: #45a049;
-        }
-
-        .popup {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 50%;
-            transform: translateX(-50%);
-            background-color: #4CAF50;
-            color: white;
-            padding: 15px;
-            border-radius: 5px;
-            z-index: 1000;
-        
-        }
-        header {
-            position: absolute;
-            top: 0;
-            right: 10px;
-            padding: 10px;
-        }
-
-        .logo {
-            height: 100px; /* Größe des Logos */
-            width: auto;
-
-        }
     </style>
 </head>
 <body>
@@ -148,13 +22,11 @@
             <input type="file" id="resume" name="resume" accept=".pdf">
 
             <h3>Extrahierte Daten:</h3>
-            <label for="job">Job:</label>
-            <select id="job" name="job" required>
+            <label for="job">Job:  <select id="job" name="job" required>
                 <option value="" disabled selected>Wählen Sie einen Job</option>
                 <option value="initiativbewerbung">Initiativbewerbung</option>
-            </select>
-
-            <label for="firstname">Vorname:</label>
+            </select></label>
+           <label for="firstname">Vorname:</label>
             <input type="text" id="firstname" name="firstname" placeholder="Vorname" required>
 
             <label for="lastname">Nachname:</label>

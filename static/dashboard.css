@@ -1,0 +1,133 @@
+body, html {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    font-family: 'Arial', sans-serif;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background: rgb(241, 241, 241);
+}
+
+.header {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.header h1 {
+    margin: 0;
+    font-size: 36px;
+    font-family: 'Helvetica Neue', sans-serif;
+    font-weight: bold;
+}
+
+.dropdown-container {
+    margin-top: 20px;
+}
+
+.dropdown {
+    padding: 10px;
+    font-size: 16px;
+    border-radius: 5px;
+    border: 1px solid rgba(70,70,70);
+    background: rgb(241, 241, 241);
+}
+
+.button-container {
+    display: flex;
+    justify-content: flex-end;
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    flex-direction: column;
+}
+
+.button-container button {
+    padding: 15px 30px;
+    background-color: rgba(35,44,63);
+    border: none;
+    border-radius: 5px;
+    color: white;
+    font-size: 18px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    margin-top: 10px;
+}
+
+.button-container button:hover {
+    background-color: rgba(255, 255, 255, 0.4);
+}
+
+.content {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+}
+
+.score-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background: rgb(241, 241, 241);
+    color: black;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    width: 300px;
+    box-sizing: border-box;
+    margin: 10px;
+    position: relative;
+}
+
+.score {
+    font-size: 48px;
+    font-weight: bold;
+}
+
+.thermometer {
+    width: 100%;
+    height: 20px;
+    background: rgb(241, 241, 241);
+    border-radius: 10px;
+    margin-top: 10px;
+    position: relative;
+}
+
+.thermometer-fill {
+    height: 100%;
+    background-color: rgba(35,44,63);
+    border-radius: 10px;
+    transition: width 0.3s;
+}
+
+.delete-button, .info-button {
+    position: absolute;
+    top: 10px;
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+
+.delete-button {
+    right: 10px;
+}
+
+.info-button {
+    right: 40px;
+}
+
+.delete-button img, .info-button img {
+    width: 20px;
+    height: 20px;
+}

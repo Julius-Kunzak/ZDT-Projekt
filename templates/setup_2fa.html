@@ -3,42 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>2FA aktivieren</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f9;
-            margin: 20px;
-            padding: 20px;
-            text-align: center;
-        }
-        .container {
-            max-width: 500px;
-            margin: auto;
-        }
-        .qr-code {
-            margin: 20px auto;
-            width: 200px;
-            height: 200px;
-        }
-        input[type="text"] {
-            padding: 8px;
-            font-size: 16px;
-            width: 80%;
-            margin-bottom: 10px;
-        }
-        button {
-            padding: 10px 20px;
-            font-size: 16px;
-            background-color: #4CAF50;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-        button:hover {
-            background-color: #45a049;
-        }
-    </style>
+    <link rel="stylesheet" href="{{ url_for('static', filename='setup_2fa.css') }}">
 </head>
 <body>
     <div class="container">

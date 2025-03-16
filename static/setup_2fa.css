@@ -1,0 +1,46 @@
+/* styles.css */
+body {
+    font-family: Arial, sans-serif;
+    background-color: rgba(70,70,70);
+    margin: 20px;
+    padding: 20px;
+    text-align: center;
+}
+
+.container {
+    max-width: 500px;
+    margin: auto;
+    background: rgb(241, 241, 241);
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.qr-code {
+    margin: 20px auto;
+    width: 200px;
+    height: 200px;
+}
+
+input[type="text"] {
+    padding: 8px;
+    font-size: 16px;
+    width: 80%;
+    margin-bottom: 10px;
+    border: 1px solid rgba(70,70,70);
+    border-radius: 5px;
+}
+
+button {
+    padding: 10px 20px;
+    font-size: 16px;
+    background-color: rgba(35,44,63);
+    color: rgb(241, 241, 241);
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: rgba(255, 255, 255, 0.4);
+}

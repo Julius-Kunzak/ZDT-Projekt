@@ -5,12 +5,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Registrierung</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='register.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='Styles.css') }}">
 </head>
 <body>
-    <h2>Registrierung</h2>
     <!-- Formular für die Registrierung -->
     <form action="{{ url_for('register') }}" method="POST">
         <!-- Eingabefeld für E-Mail -->
+        <h2>Registrierung</h2>
         <label for="email">E-Mail:</label>
         <input type="email" id="email" name="email" required>
         <br><br>

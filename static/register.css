@@ -1,0 +1,55 @@
+/* Allgemeine Stile */
+body {
+    font-family: Arial, sans-serif;
+    background-color: rgba(70,70,70);
+    text-align: center;
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+h2 {
+    color: #333;
+}
+
+/* Stil für das Formular */
+form {
+    background: rgb(241, 241, 241);
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    display: inline-block;
+    text-align: center;
+    display: flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content: center;
+    max-width:50%;
+}
+
+label {
+    font-weight: bold;
+}
+
+input[type="email"],
+input[type="password"] {
+    width: 100%;
+    padding: 10px;
+    margin: 8px 0;
+    border: 1px solid rgba(70,70,70);
+    border-radius: 4px;
+}
+
+button {
+    background-color: rgba(35,44,63);
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: rgba(255, 255, 255, 0.4);
+}
